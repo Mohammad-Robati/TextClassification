@@ -35,7 +35,10 @@ class Assessment:
                     stats[result[0]]['false'] += 1
         for stat in stats:
             recall[stat] = (stats[stat]['true'] / (stats[stat]['true'] + stats[stat]['false'])) * 100
-            fMeasure[stat] = 2 * precision[stat] * recall[stat] / (precision[stat] + recall[stat])
+            try:
+                fMeasure[stat] = 2 * precision[stat] * recall[stat] / (precision[stat] + recall[stat])
+            except:
+                pass
         print(precision)
         print(recall)
         print(fMeasure)

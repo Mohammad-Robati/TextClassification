@@ -7,24 +7,21 @@ class TestModel:
         self.testFile = testFile
 
     def testModel(self, model):
-        probabilities, classProbability = model
+        getProbability, classProbabilities = model
         finalResults = []
         with open(self.testFile, 'r') as f:
             for line in f:
-                maxP = ['', '', 0]
-                for docClass in probabilities:
+                maxP = ['', '', -math.inf]
+                for docClass in classProbabilities:
                     calculatedProbability = 0
                     pivot = line.find('@')
                     realDocClass = line[0:pivot]
                     words = line[pivot + 10:].split()
                     for i in range(len(words)):
                         key = words[i-1] + ' ' + words[i]
-                        if key in probabilities[docClass]:
-                            calculatedProbability += probabilities[docClass][key]
-                        else:
-                            pass
-                    calculatedProbability += math.log2(classProbability[docClass])
-                    if calculatedProbability < maxP[2]:
+                        calculatedProbability += math.log2(getProbability(key, docClass))
+                    calculatedProbability += math.log2(classProbabilities[docClass])
+                    if calculatedProbability > maxP[2]:
                         maxP = [docClass, realDocClass, calculatedProbability]
                 finalResults.append(maxP)
             for r in finalResults:
